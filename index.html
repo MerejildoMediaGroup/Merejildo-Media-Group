@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Merejildo Media Group</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=Barlow+Condensed:wght@400;600;700;800&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --red: #e01f2e;
+      --red-dark: #a8141f;
+      --red-glow: rgba(224,31,46,0.35);
+      --black: #080808;
+      --black-soft: #111111;
+      --black-mid: #1a1a1a;
+      --white: #f5f5f5;
+      --white-dim: rgba(245,245,245,0.65);
+      --white-faint: rgba(245,245,245,0.12);
+      --gray: #888;
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Barlow', sans-serif; background: var(--black); color: var(--white); overflow-x: hidden; }
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: var(--black); }
+    ::-webkit-scrollbar-thumb { background: var(--red); }
+
+    /* NAV */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+      padding: 1rem 2.5rem;
+      display: flex; align-items: center; justify-content: space-between;
+      background: rgba(8,8,8,0.93); backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(224,31,46,0.2);
+    }
+    .nav-logo { font-family: 'Bebas Neue', sans-serif; font-size: 1.4rem; letter-spacing: 0.08em; color: var(--white); text-decoration: none; display: flex; align-items: center; gap: 0.4rem; }
+    .nav-logo .mmg { color: var(--red); font-size: 1.7rem; }
+    .nav-links { display: flex; gap: 2rem; list-style: none; }
+    .nav-links a { font-family: 'Barlow Condensed', sans-serif; font-size: 0.78rem; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: var(--white-dim); text-decoration: none; transition: color 0.2s; position: relative; }
+    .nav-links a::after { content: ''; position: absolute; bottom: -3px; left: 0; width: 0; height: 2px; background: var(--red); transition: width 0.3s; }
+    .nav-links a:hover { color: var(--white); }
+    .nav-links a:hover::after { width: 100%; }
+    .nav-cta { font-family: 'Barlow Condensed', sans-serif; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; padding: 0.5rem 1.3rem; background: var(--red); color: var(--white); text-decoration: none; transition: all 0.25s; clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%); }
+    .nav-cta:hover { background: var(--red-dark); transform: translateY(-1px); }
+
+    /* HERO */
+    .hero { min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; position: relative; padding: 7rem 2rem 4rem; overflow: hidden; }
+    .hero-bg { position: absolute; inset: 0; background: radial-gradient(ellipse at 50% 40%, rgba(224,31,46,0.12) 0%, transparent 65%), linear-gradient(180deg, #0d0d0d 0%, #080808 100%); }
+    .hero-grid { position: absolute; inset: 0; background-image: linear-gradient(rgba(224,31,46,0.06) 1px, transparent 1px), linear-gradient(90deg, rgba(224,31,46,0.06) 1px, transparent 1px); background-size: 60px 60px; mask-image: radial-gradient(ellipse at center, black 30%, transparent 75%); }
+    .hero-content { position: relative; z-index: 2; max-width: 900px; }
+    .hero-tag { display: inline-block; font-family: 'Barlow Condensed', sans-serif; font-size: 0.68rem; font-weight: 700; letter-spacing: 0.4em; text-transform: uppercase; color: var(--red); border: 1px solid rgba(224,31,46,0.4); padding: 0.3rem 1rem; margin-bottom: 1.5rem; opacity: 0; animation: fadeUp 0.8s ease 0.2s forwards; }
+    .hero-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(3.5rem, 10vw, 8rem); line-height: 0.95; letter-spacing: 0.02em; color: var(--white); opacity: 0; animation: fadeUp 0.8s ease 0.4s forwards; }
+    .hero-title .highlight { color: var(--red); display: block; }
+    .hero-title .outline { -webkit-text-stroke: 2px var(--white); color: transparent; display: block; }
+    .hero-sub { font-size: clamp(0.95rem, 2vw, 1.15rem); font-weight: 300; color: var(--white-dim); max-width: 600px; margin: 1.5rem auto 0; line-height: 1.75; opacity: 0; animation: fadeUp 0.8s ease 0.6s forwards; }
+    .hero-sub strong { color: var(--white); font-weight: 600; }
+    .hero-stats { display: flex; gap: 3rem; justify-content: center; margin-top: 2.5rem; flex-wrap: wrap; opacity: 0; animation: fadeUp 0.8s ease 0.8s forwards; }
+    .stat-item { text-align: center; }
+    .stat-num { font-family: 'Bebas Neue', sans-serif; font-size: 2.8rem; color: var(--red); line-height: 1; display: block; }
+    .stat-label { font-family: 'Barlow Condensed', sans-serif; font-size: 0.62rem; font-weight: 600; letter-spacing: 0.25em; text-transform: uppercase; color: var(--white-dim); margin-top: 0.2rem; display: block; }
+    .hero-cta { display: flex; gap: 1rem; justify-content: center; margin-top: 2.5rem; flex-wrap: wrap; opacity: 0; animation: fadeUp 0.8s ease 1s forwards; }
+    .scroll-hint { position: absolute; bottom: 2rem; left: 50%; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; gap: 0.5rem; opacity: 0; animation: fadeUp 0.8s ease 1.5s forwards; }
+    .scroll-hint span { font-family: 'Barlow Condensed', sans-serif; font-size: 0.58rem; letter-spacing: 0.35em; text-transform: uppercase; color: var(--gray); }
+    .scroll-line { width: 1px; height: 40px; background: linear-gradient(180deg, var(--red), transparent); animation: scrollPulse 2s ease-in-out infinite; }
+
+    /* BUTTONS */
+    .btn { font-family: 'Barlow Condensed', sans-serif; font-size: 0.78rem; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; padding: 0.85rem 2rem; text-decoration: none; transition: all 0.25s; cursor: pointer; border: none; clip-path: polygon(10px 0%, 100% 0%, calc(100% - 10px) 100%, 0% 100%); }
+    .btn-red { background: var(--red); color: var(--white); box-shadow: 0 4px 25px var(--red-glow); }
+    .btn-red:hover { background: var(--red-dark); transform: translateY(-2px); box-shadow: 0 8px 35px var(--red-glow); }
+    .btn-outline { background: transparent; color: var(--white); border: 2px solid rgba(245,245,245,0.3); clip-path: none; }
+    .btn-outline:hover { border-color: var(--white); background: var(--white-faint); }
+
+    /* TICKER */
+    .ticker-wrap { background: var(--red); padding: 0.6rem 0; overflow: hidden; }
+    .ticker { display: flex; gap: 4rem; animation: ticker 35s linear infinite; white-space: nowrap; }
+    .ticker-item { font-family: 'Barlow Condensed', sans-serif; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: var(--white); flex-shrink: 0; display: flex; align-items: center; gap: 1rem; }
+    .ticker-item::before { content: '▶'; font-size: 0.5rem; opacity: 0.7; }
+    @keyframes ticker { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+    /* SECTIONS */
+    section { padding: 5.5rem 2rem; }
+    .section-label { font-family: 'Barlow Condensed', sans-serif; font-size: 0.63rem; font-weight: 700; letter-spacing: 0.45em; text-transform: uppercase; color: var(--red); display: block; margin-bottom: 0.7rem; }
+    .section-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(2rem, 5vw, 3.2rem); letter-spacing: 0.03em; color: var(--white); line-height: 1; margin-bottom: 1rem; }
+    .section-desc { font-size: 1rem; font-weight: 300; color: var(--white-dim); line-height: 1.75; max-width: 580px; }
+
+    /* ABOUT */
+    .about-section { background: var(--black-soft); position: relative; overflow: hidden; }
+    .about-section::before { content: 'MMG'; position: absolute; font-family: 'Bebas Neue', sans-serif; font-size: 20rem; color: rgba(224,31,46,0.04); right: -2rem; top: 50%; transform: translateY(-50%); line-height: 1; pointer-events: none; }
+    .about-inner { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: center; }
+    .about-pillars { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 2rem; }
+    .pillar { background: var(--black-mid); border: 1px solid rgba(245,245,245,0.07); border-left: 3px solid var(--red); padding: 1.2rem 1rem; transition: all 0.3s; }
+    .pillar:hover { background: rgba(224,31,46,0.05); transform: translateY(-2px); }
+    .pillar-icon { font-size: 1.3rem; margin-bottom: 0.4rem; display: block; }
+    .pillar-name { font-family: 'Barlow Condensed', sans-serif; font-size: 0.82rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--white); margin-bottom: 0.3rem; }
+    .pillar-desc { font-size: 0.78rem; color: var(--white-dim); line-height: 1.5; }
+    .about-card { background: var(--black-mid); border: 1px solid rgba(224,31,46,0.2); padding: 2.5rem; position: relative; }
+    .about-card::before { content: ''; position: absolute; top: 0; left: 0; width: 60px; height: 3px; background: var(--red); }
+    .about-card h3 { font-family: 'Bebas Neue', sans-serif; font-size: 1.7rem; letter-spacing: 0.05em; color: var(--white); margin-bottom: 1rem; }
+    .about-card p { font-size: 0.93rem; font-weight: 300; color: var(--white-dim); line-height: 1.8; margin-bottom: 1rem; }
+    .about-card p:last-child { margin-bottom: 0; }
+    .about-card em { color: var(--white); font-style: normal; font-weight: 600; }
+
+    /* CHANNELS */
+    .channels-section { background: var(--black); }
+    .channels-header { max-width: 1100px; margin: 0 auto 3rem; display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 1rem; }
+    .platform-tabs { display: flex; gap: 0.5rem; }
+    .tab-btn { font-family: 'Barlow Condensed', sans-serif; font-size: 0.7rem; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; padding: 0.45rem 1.1rem; background: transparent; border: 1px solid rgba(245,245,245,0.15); color: var(--white-dim); cursor: pointer; transition: all 0.25s; }
+    .tab-btn.active, .tab-btn:hover { background: var(--red); border-color: var(--red); color: var(--white); }
+    .channels-grid { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.5rem; }
+    .channel-card { background: var(--black-mid); border: 1px solid rgba(245,245,245,0.08); overflow: hidden; cursor: pointer; transition: all 0.35s; position: relative; display: none; }
+    .channel-card.visible { display: block; }
+    .channel-card:hover { border-color: var(--red); transform: translateY(-5px); box-shadow: 0 12px 40px rgba(224,31,46,0.2); }
+    .channel-thumb-placeholder { width: 100%; aspect-ratio: 1; background: linear-gradient(135deg, #1a1a1a, #111); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.8rem; position: relative; overflow: hidden; }
+    .channel-thumb-placeholder::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at 30% 30%, rgba(224,31,46,0.15) 0%, transparent 60%); }
+    .channel-platform-icon { font-size: 3.5rem; position: relative; z-index: 1; }
+    .channel-thumb-name { font-family: 'Bebas Neue', sans-serif; font-size: 1.3rem; letter-spacing: 0.05em; color: var(--white); text-align: center; padding: 0 1rem; position: relative; z-index: 1; }
+    .channel-overlay { position: absolute; inset: 0; background: rgba(224,31,46,0.88); display: flex; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.3s; }
+    .channel-card:hover .channel-overlay { opacity: 1; }
+    .channel-overlay-text { font-family: 'Bebas Neue', sans-serif; font-size: 1.4rem; letter-spacing: 0.1em; color: var(--white); text-align: center; line-height: 1.3; }
+    .channel-info { padding: 1.1rem; border-top: 1px solid rgba(245,245,245,0.06); }
+    .channel-platform { font-family: 'Barlow Condensed', sans-serif; font-size: 0.58rem; font-weight: 700; letter-spacing: 0.25em; text-transform: uppercase; color: var(--red); margin-bottom: 0.3rem; display: block; }
+    .channel-name { font-family: 'Barlow Condensed', sans-serif; font-size: 1rem; font-weight: 700; color: var(--white); }
+
+    /* MODAL */
+    .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 500; display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.3s; backdrop-filter: blur(6px); }
+    .modal-overlay.open { opacity: 1; pointer-events: all; }
+    .modal { background: var(--black-mid); border: 1px solid rgba(224,31,46,0.4); padding: 2.5rem; max-width: 380px; width: 90%; text-align: center; transform: scale(0.9); transition: transform 0.3s; }
+    .modal-overlay.open .modal { transform: scale(1); }
+    .modal-icon { font-size: 2.5rem; margin-bottom: 1rem; display: block; }
+    .modal-title { font-family: 'Bebas Neue', sans-serif; font-size: 1.7rem; letter-spacing: 0.05em; color: var(--white); margin-bottom: 0.5rem; }
+    .modal-sub { font-size: 0.88rem; color: var(--white-dim); margin-bottom: 2rem; line-height: 1.6; }
+    .modal-sub strong { color: var(--red); }
+    .modal-btns { display: flex; gap: 0.8rem; justify-content: center; }
+    .modal-confirm { font-family: 'Barlow Condensed', sans-serif; font-size: 0.78rem; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; padding: 0.75rem 1.8rem; background: var(--red); color: var(--white); border: none; cursor: pointer; transition: all 0.25s; }
+    .modal-confirm:hover { background: var(--red-dark); }
+    .modal-cancel { font-family: 'Barlow Condensed', sans-serif; font-size: 0.78rem; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; padding: 0.75rem 1.8rem; background: transparent; color: var(--white-dim); border: 1px solid rgba(245,245,245,0.2); cursor: pointer; transition: all 0.25s; }
+    .modal-cancel:hover { border-color: var(--white); color: var(--white); }
+
+    /* IMPACT */
+    .impact-section { background: var(--black-soft); position: relative; overflow: hidden; }
+    .impact-section::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, var(--red), transparent); }
+    .impact-inner { max-width: 1100px; margin: 0 auto; }
+    .impact-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.5rem; margin-top: 3rem; }
+    .impact-card { background: var(--black-mid); border: 1px solid rgba(245,245,245,0.07); padding: 2rem 1.5rem; text-align: center; transition: all 0.3s; position: relative; overflow: hidden; }
+    .impact-card::before { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 2px; background: var(--red); transform: scaleX(0); transition: transform 0.3s; }
+    .impact-card:hover::before { transform: scaleX(1); }
+    .impact-card:hover { transform: translateY(-3px); }
+    .impact-icon { font-size: 2rem; display: block; margin-bottom: 0.8rem; }
+    .impact-num { font-family: 'Bebas Neue', sans-serif; font-size: 2.5rem; color: var(--red); display: block; line-height: 1; }
+    .impact-label { font-family: 'Barlow Condensed', sans-serif; font-size: 0.72rem; font-weight: 600; letter-spacing: 0.15em; text-transform: uppercase; color: var(--white-dim); margin-top: 0.4rem; display: block; }
+    .impact-desc { font-size: 0.8rem; color: rgba(245,245,245,0.4); margin-top: 0.5rem; line-height: 1.5; }
+
+    /* DONATION */
+    .donation-section { background: var(--black); position: relative; overflow: hidden; }
+    .donation-section::before { content: ''; position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 600px; height: 600px; background: radial-gradient(circle, rgba(224,31,46,0.07) 0%, transparent 70%); pointer-events: none; }
+    .donation-inner { max-width: 600px; margin: 0 auto; text-align: center; position: relative; }
+    .donation-card { background: var(--black-mid); border: 1px solid rgba(224,31,46,0.25); padding: 3rem 2.5rem; margin-top: 2rem; position: relative; }
+    .donation-card::before, .donation-card::after { content: ''; position: absolute; width: 24px; height: 24px; border-color: var(--red); border-style: solid; }
+    .donation-card::before { top: -1px; left: -1px; border-width: 2px 0 0 2px; }
+    .donation-card::after { bottom: -1px; right: -1px; border-width: 0 2px 2px 0; }
+    .donation-desc { font-size: 0.95rem; font-weight: 300; color: var(--white-dim); line-height: 1.75; margin-bottom: 2rem; }
+    .amount-label { font-family: 'Barlow Condensed', sans-serif; font-size: 0.63rem; font-weight: 700; letter-spacing: 0.3em; text-transform: uppercase; color: var(--white-dim); display: block; margin-bottom: 0.8rem; }
+    .amount-presets { display: flex; gap: 0.5rem; justify-content: center; flex-wrap: wrap; margin-bottom: 1rem; }
+    .amount-btn { font-family: 'Barlow Condensed', sans-serif; font-size: 0.85rem; font-weight: 700; padding: 0.5rem 1.2rem; background: transparent; border: 1px solid rgba(245,245,245,0.2); color: var(--white-dim); cursor: pointer; transition: all 0.25s; }
+    .amount-btn:hover, .amount-btn.active { background: var(--red); border-color: var(--red); color: var(--white); }
+    .amount-custom-wrap { display: flex; align-items: center; justify-content: center; max-width: 200px; margin: 0 auto; }
+    .amount-currency { padding: 0.6rem 0.8rem; background: rgba(224,31,46,0.15); border: 1px solid rgba(224,31,46,0.3); border-right: none; color: var(--red); font-family: 'Barlow Condensed', sans-serif; font-weight: 700; }
+    .amount-custom-input { flex: 1; padding: 0.6rem 0.8rem; background: rgba(245,245,245,0.05); border: 1px solid rgba(245,245,245,0.15); color: var(--white); font-family: 'Barlow', sans-serif; font-size: 0.95rem; outline: none; transition: border-color 0.3s; text-align: center; min-width: 0; }
+    .amount-custom-input:focus { border-color: var(--red); }
+    .amount-custom-input::placeholder { color: rgba(245,245,245,0.25); }
+    #paypal-button-container { margin-top: 1.5rem; min-height: 50px; }
+    .paypal-loading { font-family: 'Barlow Condensed', sans-serif; font-size: 0.68rem; letter-spacing: 0.2em; color: var(--gray); text-align: center; padding: 1rem; }
+    .donation-success { display: none; background: rgba(224,31,46,0.1); border: 1px solid rgba(224,31,46,0.4); padding: 1.5rem; margin-top: 1rem; text-align: center; }
+    .donation-success .success-icon { font-size: 2rem; display: block; margin-bottom: 0.5rem; }
+    .donation-success p { font-family: 'Barlow Condensed', sans-serif; font-size: 0.82rem; letter-spacing: 0.1em; color: var(--white); margin: 0; }
+    .donation-trust { margin-top: 1.2rem; font-family: 'Barlow Condensed', sans-serif; font-size: 0.58rem; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(245,245,245,0.3); }
+
+    /* JOIN */
+    .join-section { background: var(--black-soft); }
+    .join-inner { max-width: 1100px; margin: 0 auto; }
+    .join-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-top: 3rem; }
+    .join-card { background: var(--black-mid); border: 1px solid rgba(245,245,245,0.08); padding: 2.5rem 2rem; position: relative; transition: all 0.3s; overflow: hidden; }
+    .join-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: var(--red); transform: scaleX(0); transform-origin: left; transition: transform 0.4s ease; }
+    .join-card:hover::before { transform: scaleX(1); }
+    .join-card:hover { border-color: rgba(224,31,46,0.3); }
+    .join-card-icon { font-size: 2.5rem; margin-bottom: 1rem; display: block; }
+    .join-card-title { font-family: 'Bebas Neue', sans-serif; font-size: 1.6rem; letter-spacing: 0.05em; color: var(--white); margin-bottom: 0.8rem; }
+    .join-card-desc { font-size: 0.88rem; font-weight: 300; color: var(--white-dim); line-height: 1.75; margin-bottom: 1.5rem; }
+    .join-btn { display: inline-block; font-family: 'Barlow Condensed', sans-serif; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; padding: 0.65rem 1.5rem; text-decoration: none; transition: all 0.25s; }
+    .join-btn-red { background: var(--red); color: var(--white); }
+    .join-btn-red:hover { background: var(--red-dark); }
+    .join-btn-outline { background: transparent; color: var(--white); border: 1px solid rgba(245,245,245,0.25); }
+    .join-btn-outline:hover { border-color: var(--white); background: var(--white-faint); }
+
+    /* COMING SOON */
+    .coming-section { background: var(--black); text-align: center; }
+    .coming-inner { max-width: 900px; margin: 0 auto; }
+    .coming-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 1rem; margin-top: 3rem; }
+    .coming-card { background: var(--black-mid); border: 1px dashed rgba(245,245,245,0.1); padding: 2rem 1rem; text-align: center; transition: all 0.3s; }
+    .coming-card:hover { border-color: rgba(224,31,46,0.4); background: rgba(224,31,46,0.04); }
+    .coming-icon { font-size: 1.8rem; display: block; margin-bottom: 0.8rem; filter: grayscale(1); opacity: 0.45; }
+    .coming-name { font-family: 'Barlow Condensed', sans-serif; font-size: 0.85rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(245,245,245,0.4); }
+    .coming-badge { display: inline-block; font-family: 'Barlow Condensed', sans-serif; font-size: 0.52rem; font-weight: 700; letter-spacing: 0.25em; text-transform: uppercase; background: rgba(224,31,46,0.15); color: var(--red); border: 1px solid rgba(224,31,46,0.3); padding: 0.18rem 0.5rem; margin-top: 0.5rem; }
+
+    /* FOOTER */
+    footer { background: var(--black-soft); border-top: 1px solid rgba(224,31,46,0.2); padding: 3rem 2rem; }
+    .footer-inner { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 3rem; align-items: start; }
+    .footer-logo { font-family: 'Bebas Neue', sans-serif; font-size: 2rem; letter-spacing: 0.05em; color: var(--white); display: block; margin-bottom: 0.3rem; }
+    .footer-logo span { color: var(--red); }
+    .footer-brand p { font-size: 0.83rem; font-weight: 300; color: var(--white-dim); line-height: 1.7; margin-top: 0.8rem; max-width: 300px; }
+    .footer-col h4 { font-family: 'Barlow Condensed', sans-serif; font-size: 0.62rem; font-weight: 700; letter-spacing: 0.35em; text-transform: uppercase; color: var(--red); margin-bottom: 1rem; }
+    .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 0.6rem; }
+    .footer-col ul a { font-size: 0.83rem; color: var(--white-dim); text-decoration: none; transition: color 0.2s; }
+    .footer-col ul a:hover { color: var(--white); }
+    .footer-bottom { max-width: 1100px; margin: 2rem auto 0; padding-top: 1.5rem; border-top: 1px solid rgba(245,245,245,0.07); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
+    .footer-copy { font-size: 0.72rem; color: rgba(245,245,245,0.25); }
+    .footer-copy span { color: var(--red); }
+
+    /* REVEAL */
+    .reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.7s ease, transform 0.7s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    /* ANIMATIONS */
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes scrollPulse { 0%, 100% { opacity: 0.3; } 50% { opacity: 1; } }
+
+    /* RESPONSIVE */
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .about-inner { grid-template-columns: 1fr; gap: 2rem; }
+      .about-section::before { display: none; }
+      .join-grid { grid-template-columns: 1fr; }
+      .footer-inner { grid-template-columns: 1fr; gap: 2rem; }
+    }
+    @media (max-width: 480px) {
+      .about-pillars { grid-template-columns: 1fr 1fr; }
+      .channels-grid { grid-template-columns: 1fr 1fr; }
+      .hero-stats { gap: 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- MODAL -->
+  <div class="modal-overlay" id="channelModal">
+    <div class="modal">
+      <span class="modal-icon" id="modalIcon">📺</span>
+      <h3 class="modal-title" id="modalTitle">¿Visitar canal?</h3>
+      <p class="modal-sub">¿Quieres visitar <strong id="modalName">este canal</strong>?<br>Serás redirigido a la plataforma.</p>
+      <div class="modal-btns">
+        <button class="modal-confirm" id="modalConfirm">Sí, visitar</button>
+        <button class="modal-cancel" onclick="closeModal()">Cancelar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- NAV -->
+  <nav>
+    <a href="#" class="nav-logo"><span class="mmg">MMG</span> Merejildo Media Group</a>
+    <ul class="nav-links">
+      <li><a href="#nosotros">Nosotros</a></li>
+      <li><a href="#canales">Canales</a></li>
+      <li><a href="#impacto">Impacto</a></li>
+      <li><a href="#donacion">Donar</a></li>
+      <li><a href="#unete">Únete</a></li>
+    </ul>
+    <a href="#unete" class="nav-cta">Únete al equipo</a>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-grid"></div>
+    <div class="hero-content">
+      <span class="hero-tag">Merejildo Media Group · Contenido con propósito</span>
+      <h1 class="hero-title">
+        Creamos
+        <span class="highlight">Contenido</span>
+        <span class="outline">que Transforma</span>
+      </h1>
+      <p class="hero-sub">Somos un <strong>grupo familiar de creación de contenido</strong> con canales de fe, reflexiones, entretenimiento, humor y ayuda social. Más de <strong>8 canales activos</strong> y seguimos creciendo.</p>
+      <div class="hero-stats">
+        <div class="stat-item"><span class="stat-num">8+</span><span class="stat-label">Canales activos</span></div>
+        <div class="stat-item"><span class="stat-num">3</span><span class="stat-label">Plataformas</span></div>
+        <div class="stat-item"><span class="stat-num">∞</span><span class="stat-label">Contenido con fe</span></div>
+      </div>
+      <div class="hero-cta">
+        <a href="#canales" class="btn btn-red">Ver nuestros canales</a>
+        <a href="#unete" class="btn btn-outline">Ser parte del equipo</a>
+      </div>
+    </div>
+    <div class="scroll-hint"><span>Explorar</span><div class="scroll-line"></div></div>
+  </section>
+
+  <!-- TICKER -->
+  <div class="ticker-wrap">
+    <div class="ticker">
+      <span class="ticker-item">El 10% de nuestros ingresos va directo a familias necesitadas</span>
+      <span class="ticker-item">Con cada visita a nuestros canales estás ayudando a alguien</span>
+      <span class="ticker-item">Generamos empleos reales dentro de nuestra comunidad</span>
+      <span class="ticker-item">Cada compartida de nuestros videos financia ayuda social</span>
+      <span class="ticker-item">Juntos construimos una empresa de medios con propósito</span>
+      <span class="ticker-item">Próximamente más canales, más contenido, más impacto</span>
+      <span class="ticker-item">El 10% de nuestros ingresos va directo a familias necesitadas</span>
+      <span class="ticker-item">Con cada visita a nuestros canales estás ayudando a alguien</span>
+      <span class="ticker-item">Generamos empleos reales dentro de nuestra comunidad</span>
+      <span class="ticker-item">Cada compartida de nuestros videos financia ayuda social</span>
+      <span class="ticker-item">Juntos construimos una empresa de medios con propósito</span>
+      <span class="ticker-item">Próximamente más canales, más contenido, más impacto</span>
+    </div>
+  </div>
+
+  <!-- QUIÉNES SOMOS -->
+  <section class="about-section" id="nosotros">
+    <div class="about-inner">
+      <div>
+        <span class="section-label reveal">Quiénes somos</span>
+        <h2 class="section-title reveal">Un grupo familiar<br>con una visión grande</h2>
+        <p class="section-desc reveal">Nacimos creando contenido de fe y hoy somos un equipo en crecimiento con páginas de religión, entretenimiento, humor, tecnología y ayuda social en múltiples plataformas.</p>
+        <div class="about-pillars reveal">
+          <div class="pillar"><span class="pillar-icon">✝️</span><div class="pillar-name">Fe y Reflexión</div><div class="pillar-desc">Contenido bíblico y devocionales que inspiran cada día.</div></div>
+          <div class="pillar"><span class="pillar-icon">🎬</span><div class="pillar-name">Entretenimiento</div><div class="pillar-desc">Humor, tecnología y contenido para toda la familia.</div></div>
+          <div class="pillar"><span class="pillar-icon">🤝</span><div class="pillar-name">Ayuda Social</div><div class="pillar-desc">Parte de nuestros ingresos va a familias necesitadas.</div></div>
+          <div class="pillar"><span class="pillar-icon">📈</span><div class="pillar-name">Media Group</div><div class="pillar-desc">Visión de empresa de medios con propósito real.</div></div>
+        </div>
+      </div>
+      <div class="reveal">
+        <div class="about-card">
+          <h3>Nuestra misión</h3>
+          <p>Somos <em>Merejildo Media Group</em>, un grupo familiar que comenzó con páginas de contenido religioso y hoy maneja múltiples canales en Facebook, YouTube y TikTok.</p>
+          <p>Nuestra meta es construir una <em>empresa de medios visuales</em> con propósito: entretenimiento que educa, fe que inspira y una estructura que genera empleos reales.</p>
+          <p>Actualmente manejamos <em>2 páginas grandes de religión</em> y seguimos expandiendo. <em>Próximamente más páginas, más canales, más impacto.</em></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CANALES -->
+  <section class="channels-section" id="canales">
+    <div class="channels-header reveal">
+      <div>
+        <span class="section-label">Nuestras plataformas</span>
+        <h2 class="section-title">Todos nuestros canales</h2>
+      </div>
+      <div class="platform-tabs">
+        <button class="tab-btn active" onclick="filterChannels('all',this)">Todos</button>
+        <button class="tab-btn" onclick="filterChannels('facebook',this)">Facebook</button>
+        <button class="tab-btn" onclick="filterChannels('youtube',this)">YouTube</button>
+        <button class="tab-btn" onclick="filterChannels('tiktok',this)">TikTok</button>
+      </div>
+    </div>
+    <div class="channels-grid" id="channelsGrid">
+      <div class="channel-card visible" data-platform="facebook" data-url="https://www.facebook.com/JesuseselReyofi" data-name="Jesús es el Rey" onclick="openModal(this)">
+        <div class="channel-thumb-placeholder"><span class="channel-platform-icon">📘</span><span class="channel-thumb-name">Jesús es el Rey</span></div>
+        <div class="channel-overlay"><span class="channel-overlay-text">¿Visitar<br>esta página?</span></div>
+        <div class="channel-info"><span class="channel-platform">Facebook</span><div class="channel-name">Jesús es el Rey</div></div>
+      </div>
+      <div class="channel-card visible" data-platform="facebook" data-url="https://www.facebook.com/JefferyEdi" data-name="Jeffery Edi" onclick="openModal(this)">
+        <div class="channel-thumb-placeholder"><span class="channel-platform-icon">📘</span><span class="channel-thumb-name">Jeffery Edi</span></div>
+        <div class="channel-overlay"><span class="channel-overlay-text">¿Visitar<br>esta página?</span></div>
+        <div class="channel-info"><span class="channel-platform">Facebook</span><div class="channel-name">Jeffery Edi</div></div>
+      </div>
+      <div class="channel-card visible" data-platform="facebook" data-url="https://www.facebook.com/kendoytec" data-name="Kendo y Tec" onclick="openModal(this)">
+        <div class="channel-thumb-placeholder"><span class="channel-platform-icon">📘</span><span class="channel-thumb-name">Kendo y Tec</span></div>
+        <div class="channel-overlay"><span class="channel-overlay-text">¿Visitar<br>esta página?</span></div>
+        <div class="channel-info"><span class="channel-platform">Facebook</span><div class="channel-name">Kendo y Tec</div></div>
+      </div>
+      <div class="channel-card visible" data-platform="youtube" data-url="https://www.youtube.com/@jesus_eselreydereyes" data-name="Jesús es el Rey de Reyes" onclick="openModal(this)">
+        <div class="channel-thumb-placeholder"><span class="channel-platform-icon">▶️</span><span class="channel-thumb-name">Jesús es el Rey de Reyes</span></div>
+        <div class="channel-overlay"><span class="channel-overlay-text">¿Visitar<br>este canal?</span></div>
+        <div class="channel-info"><span class="channel-platform">YouTube</span><div class="channel-name">Jesús es el Rey de Reyes</div></div>
+      </div>
+      <div class="channel-card visible" data-platform="youtube" data-url="https://www.youtube.com/@KendoYTec" data-name="Kendo Y Tec" onclick="openModal(this)">
+        <div class="channel-thumb-placeholder"><span class="channel-platform-icon">▶️</span><span class="channel-thumb-name">Kendo Y Tec</span></div>
+        <div class="channel-overlay"><span class="channel-overlay-text">¿Visitar<br>este canal?</span></div>
+        <div class="channel-info"><span class="channel-platform">YouTube</span><div class="channel-name">Kendo Y Tec</div></div>
+      </div>
+      <div class="channel-card visible" data-platform="youtube" data-url="https://www.youtube.com/@DESTRABETV" data-name="Destabe TV" onclick="openModal(this)">
+        <div class="channel-thumb-placeholder"><span class="channel-platform-icon">▶️</span><span class="channel-thumb-name">Destabe TV</span></div>
+        <div class="channel-overlay"><span class="channel-overlay-text">¿Visitar<br>este canal?</span></div>
+        <div class="channel-info"><span class="channel-platform">YouTube</span><div class="channel-name">Destabe TV</div></div>
+      </div>
+      <div class="channel-card visible" data-platform="tiktok" data-url="https://www.tiktok.com/@jesus_eselreydereyes" data-name="@jesus_eselreydereyes" onclick="openModal(this)">
+        <div class="channel-thumb-placeholder"><span class="channel-platform-icon">🎵</span><span class="channel-thumb-name">@jesus_eselreydereyes</span></div>
+        <div class="channel-overlay"><span class="channel-overlay-text">¿Visitar<br>este perfil?</span></div>
+        <div class="channel-info"><span class="channel-platform">TikTok</span><div class="channel-name">@jesus_eselreydereyes</div></div>
+      </div>
+      <div class="channel-card visible" data-platform="tiktok" data-url="https://www.tiktok.com/@muekaytec" data-name="@muekaytec" onclick="openModal(this)">
+        <div class="channel-thumb-placeholder"><span class="channel-platform-icon">🎵</span><span class="channel-thumb-name">@muekaytec</span></div>
+        <div class="channel-overlay"><span class="channel-overlay-text">¿Visitar<br>este perfil?</span></div>
+        <div class="channel-info"><span class="channel-platform">TikTok</span><div class="channel-name">@muekaytec</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- IMPACTO SOCIAL -->
+  <section class="impact-section" id="impacto">
+    <div class="impact-inner">
+      <span class="section-label reveal">Lo que hacemos por otros</span>
+      <h2 class="section-title reveal">Contenido con impacto real</h2>
+      <p class="section-desc reveal">No solo creamos contenido. Cada vista, compartida y donación se convierte en ayuda real para personas que lo necesitan.</p>
+      <div class="impact-grid">
+        <div class="impact-card reveal"><span class="impact-icon">❤️</span><span class="impact-num">10%</span><span class="impact-label">De ingresos a ayuda social</span><p class="impact-desc">Cada mes destinamos una parte de nuestros ingresos a familias de bajos recursos.</p></div>
+        <div class="impact-card reveal"><span class="impact-icon">👨‍👩‍👧‍👦</span><span class="impact-num">pocas</span><span class="impact-label">por ahora · vamos por más</span><p class="impact-desc">Familias que han recibido apoyo directo gracias a nuestra comunidad. Seguimos creciendo.</p></div>
+        <div class="impact-card reveal"><span class="impact-icon">💼</span><span class="impact-num">Real</span><span class="impact-label">Empleos generados</span><p class="impact-desc">Creamos oportunidades de trabajo dentro de nuestra red de canales.</p></div>
+        <div class="impact-card reveal"><span class="impact-icon">🎄</span><span class="impact-num">Anual</span><span class="impact-label">Eventos especiales</span><p class="impact-desc">Navidad, Año Nuevo, Semana Santa: eventos de impacto para las comunidades.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- DONACIÓN -->
+  <section class="donation-section" id="donacion">
+    <div class="donation-inner">
+      <span class="section-label reveal">Apoya la misión</span>
+      <h2 class="section-title reveal">Tu donación<br>cambia vidas</h2>
+      <p class="section-desc reveal" style="margin:0 auto;text-align:center;">Cada aporte llega directo a familias que necesitan esperanza. Tú eres parte del cambio.</p>
+      <div class="donation-card reveal">
+        <p class="donation-desc">Elige un monto y dona de forma segura a través de PayPal. El 100% de las donaciones va a personas necesitadas.</p>
+        <span class="amount-label">Selecciona o ingresa un monto (USD)</span>
+        <div class="amount-presets">
+          <button class="amount-btn" data-amount="5">$5</button>
+          <button class="amount-btn active" data-amount="10">$10</button>
+          <button class="amount-btn" data-amount="25">$25</button>
+          <button class="amount-btn" data-amount="50">$50</button>
+        </div>
+        <div class="amount-custom-wrap">
+          <span class="amount-currency">$</span>
+          <input type="number" class="amount-custom-input" id="custom-amount" min="1" placeholder="Otro monto"/>
+        </div>
+        <div id="paypal-button-container"><p class="paypal-loading">Cargando PayPal…</p></div>
+        <div class="donation-success" id="donation-success"><span class="success-icon">🙏</span><p>¡Gracias por tu donación! Que Dios bendiga tu generosidad.</p></div>
+        <div class="donation-trust">Pago 100% seguro · Sin comisiones ocultas · PayPal</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ÚNETE -->
+  <section class="join-section" id="unete">
+    <div class="join-inner">
+      <span class="section-label reveal">Sé parte de algo grande</span>
+      <h2 class="section-title reveal">Únete a Merejildo Media Group</h2>
+      <p class="section-desc reveal">Buscamos personas apasionadas por el contenido y también inversionistas con visión. Aquí hay un lugar para ti.</p>
+      <div class="join-grid">
+        <div class="join-card reveal">
+          <span class="join-card-icon">💬</span>
+          <h3 class="join-card-title">Comunidad WhatsApp</h3>
+          <p class="join-card-desc">Únete a nuestra comunidad en WhatsApp y recibe contenido exclusivo, devocionales, noticias del grupo y mucho más. Gratis, con propósito.</p>
+          <a href="https://chat.whatsapp.com/Gc8zYWTFuA94GSjyJKhA57" target="_blank" class="join-btn join-btn-red">Unirse a WhatsApp</a>
+        </div>
+        <div class="join-card reveal">
+          <span class="join-card-icon">✈️</span>
+          <h3 class="join-card-title">Canal de Telegram</h3>
+          <p class="join-card-desc">Síguenos en Telegram para contenido más detallado, lanzamientos exclusivos y actualizaciones del grupo antes que nadie.</p>
+          <a href="https://t.me/MerejildoMediaGroup" target="_blank" class="join-btn join-btn-red">Seguir en Telegram</a>
+        </div>
+        <div class="join-card reveal">
+          <span class="join-card-icon">🎬</span>
+          <h3 class="join-card-title">Trabaja con nosotros</h3>
+          <p class="join-card-desc">¿Eres editor de video, creador de contenido, diseñador o community manager? Escríbele a un administrador de la comunidad de WhatsApp o Telegram para poder trabajar con nosotros.</p>
+          <a href="https://chat.whatsapp.com/Gc8zYWTFuA94GSjyJKhA57" target="_blank" class="join-btn join-btn-red">Hablar con administrador</a>
+        </div>
+        <div class="join-card reveal">
+          <span class="join-card-icon">💰</span>
+          <h3 class="join-card-title">Sé inversionista</h3>
+          <p class="join-card-desc">Manejamos <strong style="color:var(--white)">2 páginas grandes de religión</strong> con audiencia activa y una visión clara: convertirnos en una empresa de medios visuales, entretenimiento y educación. ¿Quieres ser parte?</p>
+          <a href="mailto:merejildo.corp@gmail.com" class="join-btn join-btn-outline">Quiero invertir</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRÓXIMAMENTE -->
+  <section class="coming-section">
+    <div class="coming-inner">
+      <span class="section-label reveal">En construcción</span>
+      <h2 class="section-title reveal">Próximamente más canales</h2>
+      <p class="section-desc reveal" style="margin:0 auto;">Nuestra red sigue creciendo. Nuevas páginas, nuevos temas, nuevas plataformas.</p>
+      <div class="coming-grid reveal">
+        <div class="coming-card"><span class="coming-icon">📘</span><div class="coming-name">Nueva página Facebook</div><span class="coming-badge">Próximamente</span></div>
+        <div class="coming-card"><span class="coming-icon">▶️</span><div class="coming-name">Nuevo canal YouTube</div><span class="coming-badge">Próximamente</span></div>
+        <div class="coming-card"><span class="coming-icon">🎵</span><div class="coming-name">Nuevo perfil TikTok</div><span class="coming-badge">Próximamente</span></div>
+        <div class="coming-card"><span class="coming-icon">📸</span><div class="coming-name">Instagram MMG</div><span class="coming-badge">Próximamente</span></div>
+        <div class="coming-card"><span class="coming-icon">🤝</span><div class="coming-name">Páginas de ayuda social</div><span class="coming-badge">Próximamente</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <span class="footer-logo"><span>MMG</span> Merejildo Media Group</span>
+        <p>Grupo familiar de creación de contenido con propósito. Fe, entretenimiento, humor y ayuda social en una sola red de medios.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Plataformas</h4>
+        <ul>
+          <li><a href="https://www.facebook.com/JesuseselReyofi" target="_blank">FB · Jesús es el Rey</a></li>
+          <li><a href="https://www.facebook.com/JefferyEdi" target="_blank">FB · Jeffery Edi</a></li>
+          <li><a href="https://www.youtube.com/@jesus_eselreydereyes" target="_blank">YT · Jesús es el Rey</a></li>
+          <li><a href="https://www.tiktok.com/@jesus_eselreydereyes" target="_blank">TT · @jesus_eselreydereyes</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Empresa</h4>
+        <ul>
+          <li><a href="#nosotros">Quiénes somos</a></li>
+          <li><a href="#impacto">Impacto social</a></li>
+          <li><a href="#unete">Trabaja con nosotros</a></li>
+          <li><a href="#unete">Inversionistas</a></li>
+          <li><a href="#donacion">Donar</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span class="footer-copy">© 2026 <span>Merejildo Media Group</span> · Hecho con propósito</span>
+      <span class="footer-copy">Contenido que transforma · <span>MMG</span></span>
+    </div>
+  </footer>
+
+  <script>
+    let selectedAmount = 10;
+
+    document.querySelectorAll('.amount-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.amount-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        selectedAmount = parseFloat(btn.dataset.amount);
+        document.getElementById('custom-amount').value = '';
+        if (window.paypalButtonsInstance) { window.paypalButtonsInstance.close(); renderPayPalButtons(); }
+      });
+    });
+
+    document.getElementById('custom-amount').addEventListener('input', (e) => {
+      const val = parseFloat(e.target.value);
+      if (val && val >= 1) {
+        document.querySelectorAll('.amount-btn').forEach(b => b.classList.remove('active'));
+        selectedAmount = val;
+        clearTimeout(window.customAmountTimer);
+        window.customAmountTimer = setTimeout(() => {
+          if (window.paypalButtonsInstance) { window.paypalButtonsInstance.close(); renderPayPalButtons(); }
+        }, 600);
+      }
+    });
+
+    function renderPayPalButtons() {
+      const container = document.getElementById('paypal-button-container');
+      container.innerHTML = '';
+      window.paypalButtonsInstance = paypal.Buttons({
+        style: { layout: 'vertical', color: 'black', shape: 'rect', label: 'donate', height: 48 },
+        createOrder: (data, actions) => actions.order.create({
+          purchase_units: [{ description: 'Donación · Merejildo Media Group', amount: { currency_code: 'USD', value: (selectedAmount >= 1 ? selectedAmount : 1).toFixed(2) } }],
+          application_context: { shipping_preference: 'NO_SHIPPING' }
+        }),
+        onApprove: (data, actions) => actions.order.capture().then(() => {
+          document.getElementById('donation-success').style.display = 'block';
+          document.getElementById('paypal-button-container').style.display = 'none';
+        }),
+        onError: () => { document.getElementById('paypal-button-container').innerHTML = '<p class="paypal-loading">Ocurrió un error. Intenta de nuevo.</p>'; }
+      });
+      window.paypalButtonsInstance.render('#paypal-button-container');
+    }
+
+    function initPayPal() { renderPayPalButtons(); }
+
+    let pendingUrl = '';
+    function openModal(card) {
+      pendingUrl = card.dataset.url;
+      const name = card.dataset.name;
+      const platform = card.dataset.platform;
+      const icons = { facebook: '📘', youtube: '▶️', tiktok: '🎵' };
+      const types = { facebook: 'página', youtube: 'canal', tiktok: 'perfil' };
+      document.getElementById('modalIcon').textContent = icons[platform] || '🌐';
+      document.getElementById('modalName').textContent = name;
+      document.getElementById('modalTitle').textContent = '¿Visitar ' + (types[platform] || 'canal') + '?';
+      document.getElementById('modalConfirm').onclick = () => { window.open(pendingUrl, '_blank'); closeModal(); };
+      document.getElementById('channelModal').classList.add('open');
+    }
+
+    function closeModal() { document.getElementById('channelModal').classList.remove('open'); }
+    document.getElementById('channelModal').addEventListener('click', (e) => { if (e.target === document.getElementById('channelModal')) closeModal(); });
+
+    function filterChannels(platform, btn) {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      document.querySelectorAll('.channel-card').forEach(card => {
+        card.classList.toggle('visible', platform === 'all' || card.dataset.platform === platform);
+      });
+    }
+
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((e, i) => {
+        if (e.isIntersecting) { setTimeout(() => e.target.classList.add('visible'), i * 80); observer.unobserve(e.target); }
+      });
+    }, { threshold: 0.1 });
+    reveals.forEach(el => observer.observe(el));
+  </script>
+
+  <script
+    src="https://www.paypal.com/sdk/js?client-id=AQZD5RpWp7z-bmFY1O7OsqtJGWqDbT5v3kfTWaj9DHe1EPipFEiCZ4oA8uYiXW6xw7dkOCHnllBTYq1L&currency=USD"
+    onload="initPayPal()"
+    onerror="document.getElementById('paypal-button-container').innerHTML='<p class=\'paypal-loading\'>No se pudo cargar PayPal.</p>'"
+  ></script>
+</body>
+</html>
